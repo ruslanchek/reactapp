@@ -4,7 +4,7 @@
   "description": "For simple projects using Webpack, React, React-Router, ES6 & Bootstrap",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot --progress --colors",
+    "start": "webpack-dev-server --hot --progress --colors --history-api-fallback",
     "build": "webpack --progress --colors"
   },
   "author": {
@@ -22,8 +22,9 @@
     "node-libs-browser": "^0.5.0",
     "react": "^0.13.3",
     "react-hot-loader": "^1.2.7",
-    "react-router": "^0.13.3",
+    "react-router": "2.0.0-rc5",
     "style-loader": "^0.12.2",
+    "stylus-loader": "^1.4.3",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
   }

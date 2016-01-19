@@ -1,34 +1,18 @@
 import React from 'react';
-import Router from 'react-router';
-import {DefaultRoute, Link, Route, RouteHandler} from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import '../assets/styles/styles.styl'
 
-// Global Styles
-import '../assets/styles/bootstrap.css'
-import '../assets/styles/index.less'
+import App from './components/common/app.js';
+import NoMatch from './components/pages/nomatch.js';
+import Routes from './routes/routes.js';
 
+let routes = new Routes();
 
-// Components
-import Page1 from './components/page1.js';
-import Nav from './components/nav.js';
-
-
-let App = React.createClass({
-  render() {
-    return (
-      <div>
-        <Nav />
-        <RouteHandler/>
-      </div>
-    );
-  }
-});
-
-let routes = (
-  <Route name="app" path="/" handler={App}>
-    <Route name="page1" path="/page1" handler={Page1}/>
-  </Route>
-);
-
-Router.run(routes, function (Handler) {
-  React.render(<Handler/>, document.body);
-});
+React.render((
+	<Router history={browserHistory}>
+		<Route path="/" component={App}>
+			{routes.getComponents()}
+			<Route path="*" component={NoMatch}/>
+		</Route>
+	</Router>
+), document.body);

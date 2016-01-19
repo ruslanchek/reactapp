@@ -1,5 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
+var path = require('path');
+var webpack = require('webpack');
+
 module.exports = {
     entry: [
       'webpack/hot/only-dev-server',
@@ -16,9 +17,10 @@ module.exports = {
             { test: /\.css$/, loaders: ["style-loader", "css-loader"] },
             { test: /\.less$/, loaders: ["style-loader", "css-loader", "less-loader"] },
             { test: /\.(png|jpg|ttf|woff|svg|otf|eot|svg).*?$/, loader: "file-loader" },
+			{ test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
         ]
     },
     plugins: [
       new webpack.NoErrorsPlugin()
     ]
-}
+};
