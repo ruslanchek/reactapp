@@ -1,47 +1,91 @@
 import React from 'react';
 import {Route, IndexRoute, Link} from 'react-router';
-import Page1 from '../components/pages/page1.js';
-import Homepage from '../components/pages/homepage.js';
-
-const routes = [
-	{
-		path: 'page1',
-		name: 'Page 1',
-		component: Page1,
-		index: false
-	},
-	{
-		path: '/',
-		name: 'Homepage',
-		component: Homepage,
-		index: true
-	}
-];
+import routes from '../data/routes.js';
 
 class Routes {
-	getComponents(){
-		let components = [];
+    getChildrenComponents(route) {
+        let children = [];
 
-		for (let i in routes) {
-			if(routes[i].index){
-				components.push(<IndexRoute component={routes[i].component}/>);
-			} else {
-				components.push(<Route path={routes[i].path} component={routes[i].component} />);
-			}
-		}
+        if (route.children) {
+            for (let i in route.children) {
+                children.push(
+                    <Route key={i} path={route.children[i].path} component={route.children[i].component}>
+                        {this.getChildrenComponents(route.children[i])}
+                    </Route>
+                );
+            }
+        }
 
-		return components;
-	};
+        return children;
+    };
 
-	getNavItems(){
-		let items = [];
+    getComponents() {
+        let components = [];
 
-		for (let i in routes) {
-			items.push(<li><Link to={routes[i].path} activeClassName="active">{routes[i].name}</Link></li>);
-		}
+        for (let i in routes) {
+            if (routes[i].index) {
+                components.push(
+                    <IndexRoute key={i} component={routes[i].component}/>
+                );
+            } else {
+                components.push(
+                    <Route key={i} path={routes[i].path} component={routes[i].component}>
+                        {this.getChildrenComponents(routes[i])}
+                    </Route>
+                );
+            }
+        }
 
-		return items;
-	};
+        console.log(components)
+
+        return components;
+    };
+
+    getSub(route) {
+        let sub;
+
+        if (route.children) {
+            let children = [];
+
+            for (let i in route.children) {
+                let path = route.children[i].path;
+
+                children.push(
+                    <div key={i} className="item">
+                        <Link to={path} activeClassName="active">
+                            {route.children[i].name}
+                        </Link>
+                        {this.getSub(route.children[i])}
+                    </div>
+                );
+            }
+
+            sub = (<div className="sub">{children}</div>);
+        }
+
+        return sub;
+    };
+
+    getNavItems() {
+        let items = [];
+
+        for (let i in routes) {
+            let path = routes[i].path;
+
+            if (!routes[i].excludeNav) {
+                items.push(
+                    <div key={i} className="item">
+                        <Link to={path} activeClassName="active">
+                            {routes[i].name}
+                        </Link>
+                        {this.getSub(routes[i])}
+                    </div>
+                );
+            }
+        }
+
+        return items;
+    };
 }
 
 export default Routes;
